@@ -1,0 +1,16 @@
+[package]
+name = "security"
+version = "0.1.0"
+authors = ["modelflat"]
+edition = "2018"
+
+[lib]
+name = "security"
+
+[[bin]]
+name = "security-app"
+path = "app/main.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
