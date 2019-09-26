@@ -8,8 +8,28 @@ edition = "2018"
 name = "security"
 
 [[bin]]
-name = "security-app"
-path = "app/main.rs"
+name = "task1"
+path = "app/task1.rs"
+
+[[bin]]
+name = "task3"
+path = "app/task3.rs"
+
+[[bin]]
+name = "task4"
+path = "app/task4.rs"
+
+[[bin]]
+name = "task5"
+path = "app/task5.rs"
+
+[[bin]]
+name = "task6"
+path = "app/task6.rs"
+
+[[bin]]
+name = "task7"
+path = "app/task7.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
