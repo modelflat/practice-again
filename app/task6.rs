@@ -16,16 +16,17 @@ fn parse_args() -> Args {
     )
 }
 
-fn checksum(algo: &str, data: &[u8]) -> String {
+fn checksum(algo: &str, data: Vec<u8>) -> String {
     match algo.to_lowercase().as_str() {
-        "xor" => format!("{:X}", checksum::parity_bit(data)),
+        "xor" => format!("{:X}", checksum::parity_bit(&data)),
+        "sha256" => checksum::sha::sha256(data),
         _ => "no such algorithm".to_string(),
     }
 }
 
 fn main() {
     let Args(path, algo) = parse_args();
-    let data = std::fs::read(path).expect("Can't open file!");
 
-    println!("{} = {}", algo, checksum(&algo, &data));
+    let data = std::fs::read(path).expect("Can't open file!");
+    println!("{} = {}", algo, checksum(&algo, data));
 }
