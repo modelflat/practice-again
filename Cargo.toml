@@ -34,3 +34,5 @@ path = "app/task7.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+memmap = "0.7"
+aho-corasick = "0.7"

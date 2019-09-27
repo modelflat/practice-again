@@ -7,3 +7,5 @@ Cargo.lock
 
 book.txt
 sample_text.txt
+signature.file
+test-dir-tree

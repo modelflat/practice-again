@@ -1,6 +1,8 @@
 use std::str::FromStr;
+use std::path::{Path, PathBuf};
+use std::io;
 
-/// Most executables in this course should distinguish between Encoding and Decoding modes
+/// Some executables in this course need to distinguish between Encoding and Decoding modes
 pub enum OperationMode {
     Encrypt, Decrypt
 }
@@ -28,4 +30,23 @@ pub fn is_russian_char(c: &char) -> bool {
 /// Convenience wrapper.
 pub fn is_russian_char_or_punct_or_num_or_ws(c: &char) -> bool {
     is_russian_char(c) || c.is_ascii_punctuation() || c.is_ascii_digit() || c.is_whitespace()
+}
+
+/// List all files in directory tree into vector.
+pub fn files_in_tree(root: &Path) -> io::Result<Vec<PathBuf>> {
+
+    fn accumulate_files(root: &Path, acc: &mut Vec<PathBuf>) -> io::Result<()> {
+        if root.is_file() {
+            acc.push(root.to_path_buf());
+        } else if root.is_dir() {
+            for entry in std::fs::read_dir(root)? {
+                accumulate_files(&entry?.path(), acc)?;
+            }
+        }
+        Ok(())
+    }
+
+    let mut result = Vec::new();
+    accumulate_files(root, &mut result)?;
+    Ok(result)
 }

@@ -10,6 +10,8 @@ pub use utils::OperationMode;
 
 pub mod checksum;
 
+pub mod sig_search;
+
 pub use text_stats::*;
 pub use text_hiding::*;
 pub use xor::*;
