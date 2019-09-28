@@ -44,6 +44,14 @@ pub fn len_bits(s: &str) -> usize {
     s.len() * 8usize
 }
 
+/// Remove trailing zeros from vector of bytes.
+pub fn remove_trailing_zeros(buf: &mut Vec<u8>) {
+    while buf.last().map_or(false, |&b| b == 0u8) {
+        buf.pop();
+    }
+}
+
+
 #[derive(Debug)]
 pub struct AlgorithmError { pub what: String }
 
@@ -53,7 +61,7 @@ pub mod lines {
 
     /// Hide text in the multi-line container
     pub fn hide(text: &str, container: &mut Vec<String>, secret_char: char) -> Result<String, AlgorithmError> {
-        if len_bits(text) < container.len() {
+        if len_bits(text) > container.len() {
             return Err(AlgorithmError {
                 what: format!("Cannot hide text of length {} bits in {}-line container",
                               len_bits(text), container.len()
@@ -79,6 +87,8 @@ pub mod lines {
             &mut buf
         );
 
+        remove_trailing_zeros(&mut buf);
+
         String::from_utf8(buf).map_err(|_| AlgorithmError { what: "Failed to decode UTF8".to_string() })
     }
 
@@ -90,7 +100,7 @@ pub mod lines {
         pub fn test_hide_reveal() {
             let text = "ыs";
             let mut container = "line\n"
-                .repeat(len_bits(text))
+                .repeat(len_bits(text) + 1)
                 .trim()
                 .split_ascii_whitespace()
                 .map(|s| s.to_string())
@@ -217,6 +227,8 @@ pub mod ru_en_similarity {
         let mut buf = Vec::new();
         accumulate_bits(result, &mut buf);
 
+        remove_trailing_zeros(&mut buf);
+
         String::from_utf8(buf).map_err(|_| AlgorithmError {
             what: "Failed to decode text".to_string()
         })
@@ -229,7 +241,7 @@ pub mod ru_en_similarity {
         #[test]
         pub fn test_hide_reveal() {
             let text = "ыs";
-            let container = "a".repeat(len_bits(text));
+            let container = "a".repeat(len_bits(text) + 1);
 
             let container = hide(text, &container, MappingDirection::EnRu);
             assert!(container.is_ok());
