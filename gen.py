@@ -3,11 +3,18 @@ import random as rand
 
 
 def generate_file(path, approx_size, signature=None, random=False, chunksize=1 << 16):
+    def gen_chunk(n):
+        return os.urandom(n) if random else b"A" * n
+
     with open(path, "wb") as f:
         size = 0
-        for i in range(approx_size // chunksize + 1):
-            b = os.urandom(chunksize) if random else b"A"*chunksize
-            size += f.write(b)
+
+        if approx_size >= chunksize:
+            for i in range(approx_size // chunksize + 1):
+                size += f.write(gen_chunk(chunksize))
+        else:
+            size += f.write(gen_chunk(approx_size))
+
         if signature is not None:
             signature_pos = rand.randint(0, size - 1)
             print("File {} will have signature at {}".format(path, signature_pos))

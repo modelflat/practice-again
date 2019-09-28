@@ -31,7 +31,7 @@ fn main() {
 
     let t = Instant::now();
     let mut total_size = 0;
-    for (i, file) in all_files.iter().rev().enumerate() {
+    for (_i, file) in all_files.iter().rev().enumerate() {
         // println!("[{:3}/{:3}] Looking at {:?}...", i + 1, all_files.len(), file);
 
         if let Some(res) = sig_search::search_file(&file, &signature)
