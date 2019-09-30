@@ -1,3 +1,5 @@
+use std::io::{stdout, Write};
+
 use security::*;
 
 struct Args(String, usize);
@@ -12,7 +14,6 @@ fn parse_args() -> Args {
     )
 }
 
-
 fn main() {
     let Args(filename, size) = parse_args();
 
@@ -23,6 +24,8 @@ fn main() {
         .collect::<String>();
 
     for (el, n) in security::frequencies(&filtered_text, size) {
-        println!("{} - {:.6}", el, n);
+        if let Err(_) = writeln!(stdout(), "{} - {:.6}", el, n) {
+            break;
+        }
     }
 }
