@@ -9,3 +9,12 @@ book.txt
 sample_text.txt
 signature.file
 test-dir-tree
+
+# do not ignore all without extension (*; !*.*) cuz explicit is better
+task1
+task2
+task3
+task4
+task5
+task6
+task7
