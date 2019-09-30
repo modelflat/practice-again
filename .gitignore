@@ -5,8 +5,7 @@ Cargo.lock
 .idea/
 *.iml
 
-book.txt
-sample_text.txt
+*.txt
 signature.file
 test-dir-tree
 

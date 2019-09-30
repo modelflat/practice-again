@@ -18,22 +18,30 @@ pub fn slide_string(s: &str, win: usize) -> impl Iterator<Item=&str> {
         })
 }
 
-/// Computes counts of characters or character clusters in text.
-pub fn counts(text: &str, win: usize) -> (u64, StrCounts) {
+/// Computes counts of characters or character clusters in text, with respect to filter.
+/// Filter is applied as following: if all chars in window satisfy filter, then keep this window,
+/// else skip it (this helps to respect word boundaries, for example).
+pub fn counts<F>(text: &str, filter: F, win: usize) -> (u64, StrCounts)
+    where F: Fn(char,) -> bool
+{
     let mut freq = StrCounts::with_capacity(1 << 8);
 
     let mut total = 0u64;
     for piece in slide_string(text, win) {
-        *freq.entry(piece).or_insert(0) += 1;
-        total += 1;
+        if piece.chars().all(&filter) {
+            *freq.entry(piece).or_insert(0) += 1;
+            total += 1;
+        }
     }
 
     (total, freq)
 }
 
 /// Computes frequencies of characters or character clusters in text.
-pub fn frequencies(text: &str, win: usize) -> StrFrequencies {
-    let (total, freq) = counts(text, win);
+pub fn frequencies<F>(text: &str, filter: F, win: usize) -> StrFrequencies
+    where F: Fn(char,) -> bool
+{
+    let (total, freq) = counts(text, filter, win);
 
     if total == 0 {
         StrFrequencies::new()
@@ -85,16 +93,18 @@ mod tests {
 
     #[bench]
     pub fn bench_counts_window_1(b: &mut Bencher) {
+        use crate::utils::is_russian_char;
         match std::fs::read_to_string("book.txt") {
-            Ok(text) => b.iter(|| counts(text.as_str(), 1).1.len()),
+            Ok(text) => b.iter(|| counts(text.as_str(), is_russian_char, 1).1.len()),
             Err(_) => eprintln!("Cannot run bench for counts, book.txt is not available")
         }
     }
 
     #[bench]
     pub fn bench_counts_window_2(b: &mut Bencher) {
+        use crate::utils::is_russian_char;
         match std::fs::read_to_string("book.txt") {
-            Ok(text) => b.iter(|| counts(text.as_str(), 2).1.len()),
+            Ok(text) => b.iter(|| counts(text.as_str(), is_russian_char, 2).1.len()),
             Err(_) => eprintln!("Cannot run bench for counts, book.txt is not available")
         }
     }

@@ -20,10 +20,9 @@ fn main() {
     let filtered_text = std::fs::read_to_string(&filename)
         .unwrap_or(filename) // assume that this is the string to parse, if can't load
         .chars()
-        .filter(utils::is_russian_char)
         .collect::<String>();
 
-    for (el, n) in security::frequencies(&filtered_text, size) {
+    for (el, n) in security::frequencies(&filtered_text.to_lowercase(), utils::is_russian_char, size) {
         if let Err(_) = writeln!(stdout(), "{} - {:.6}", el, n) {
             break;
         }

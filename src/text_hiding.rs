@@ -69,6 +69,10 @@ pub mod lines {
             });
         }
 
+        for s in container.iter_mut() {
+            *s = s.trim_end().to_string();
+        }
+
         iterate_bits(text).enumerate().for_each(
             |(i, bit)| if bit { container[i].push(secret_char) }
         );
@@ -148,8 +152,8 @@ pub mod ru_en_similarity {
 
         fn from_str(s: &str) -> Result<Self, Self::Err> {
             match s.to_lowercase().as_str() {
-                "ru_en" | "RuEn" => Ok(MappingDirection::RuEn),
-                "en_ru" | "EnRu" => Ok(MappingDirection::EnRu),
+                "ru_en" | "ruen" => Ok(MappingDirection::RuEn),
+                "en_ru" | "enru" => Ok(MappingDirection::EnRu),
                 _ => Err(())
             }
         }
