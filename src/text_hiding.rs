@@ -157,26 +157,28 @@ pub mod ru_en_similarity {
 
     // Not present as a static variable because there are constraints on compile-time code
     fn create_char_map(dir: MappingDirection) -> HashMap<char, char> {
-        let mut map = Vec::new();
-
-        map.push(('a', 'а'));
-        map.push(('c', 'с'));
-        map.push(('e', 'е'));
-        map.push(('o', 'о'));
-        map.push(('p', 'р'));
-        map.push(('y', 'у'));
-
-        map.push(('A', 'А'));
-        map.push(('B', 'В'));
-        map.push(('C', 'С'));
-        map.push(('E', 'Е'));
-        map.push(('H', 'Н'));
-        map.push(('K', 'К'));
-        map.push(('M', 'М'));
-        map.push(('O', 'О'));
-        map.push(('P', 'Р'));
-        map.push(('T', 'Т'));
-        map.push(('X', 'Х'));
+        let map = vec![
+            // (En char, Cyr char)
+            // lowercase
+            ('a', 'а'),
+            ('c', 'с'),
+            ('e', 'е'),
+            ('o', 'о'),
+            ('p', 'р'),
+            ('y', 'у'),
+            // uppercase
+            ('A', 'А'),
+            ('B', 'В'),
+            ('C', 'С'),
+            ('E', 'Е'),
+            ('H', 'Н'),
+            ('K', 'К'),
+            ('M', 'М'),
+            ('O', 'О'),
+            ('P', 'Р'),
+            ('T', 'Т'),
+            ('X', 'Х'),
+        ];
 
         match dir {
             MappingDirection::EnRu => map.into_iter().collect(),
