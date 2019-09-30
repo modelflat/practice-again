@@ -89,7 +89,7 @@ pub mod lines {
 
         remove_trailing_zeros(&mut buf);
 
-        String::from_utf8(buf).map_err(|_| AlgorithmError { what: "Failed to decode UTF8".to_string() })
+        Ok(String::from_utf8_lossy(&buf).to_string())
     }
 
     #[cfg(test)]
@@ -229,9 +229,7 @@ pub mod ru_en_similarity {
 
         remove_trailing_zeros(&mut buf);
 
-        String::from_utf8(buf).map_err(|_| AlgorithmError {
-            what: "Failed to decode text".to_string()
-        })
+        Ok(String::from_utf8_lossy(&buf).to_string())
     }
 
     #[cfg(test)]
