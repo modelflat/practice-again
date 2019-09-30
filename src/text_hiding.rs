@@ -1,12 +1,14 @@
 use std::iter::Iterator;
 
+const BITS_IN_BYTE: u8 = 8;
+
 /// Returns an iterator over bits (as bool values) in string.
 pub fn iterate_bits(s: &str) -> impl Iterator<Item=bool> + '_ {
     s
         .bytes()
         .flat_map(
             move |b|
-                (0..8).map(
+                (0..BITS_IN_BYTE).map(
                     move |i| (b & (1 << i) != 0)
                 )
         )
@@ -16,8 +18,6 @@ pub fn iterate_bits(s: &str) -> impl Iterator<Item=bool> + '_ {
 pub fn accumulate_bits<Iter>(it: Iter, buf: &mut Vec<u8>)
     where Iter: Iterator<Item=bool>
 {
-    const BITS_IN_BYTE: u8 = 8;
-
     let mut cur = 0u8;
     let mut cur_idx = 0;
 
@@ -41,7 +41,7 @@ pub fn accumulate_bits<Iter>(it: Iter, buf: &mut Vec<u8>)
 
 /// Returns the length of a string in bits
 pub fn len_bits(s: &str) -> usize {
-    s.len() * 8usize
+    s.len() * BITS_IN_BYTE as usize
 }
 
 /// Remove trailing zeros from vector of bytes.
