@@ -32,14 +32,11 @@ fn main() {
     let t = Instant::now();
     let mut total_size = 0;
     for (_i, file) in all_files.iter().rev().enumerate() {
-        // println!("[{:3}/{:3}] Looking at {:?}...", i + 1, all_files.len(), file);
-
         if let Some(res) = sig_search::search_file(&file, &signature)
             .expect(format!("Error searching file: {:?}", file).as_str())
         {
             println!("{:?}: found at byte position {}", res.path, res.start);
         }
-
         total_size += file.metadata().unwrap().len();
     }
     let t = (Instant::now() - t).as_secs_f64();

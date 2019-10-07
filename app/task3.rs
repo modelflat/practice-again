@@ -1,5 +1,3 @@
-/// Does NOT filter input text to avoid introducing OperationMode into args.
-
 use security::*;
 
 struct Args(String, String, Option<String>);

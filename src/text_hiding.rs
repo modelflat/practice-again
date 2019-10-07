@@ -193,6 +193,14 @@ pub mod ru_en_similarity {
     /// Hide text in the container
     pub fn hide(text: &str, container: &str, direction: MappingDirection) -> Result<String, AlgorithmError> {
         let map = create_char_map(direction);
+        let inverse_map = create_char_map(direction.invert());
+
+        if container.chars().any(|c| inverse_map.contains_key(&c)) {
+            return Err(AlgorithmError {
+                what: "Container is dirty".to_string()
+            })
+        }
+
         let mut bits = iterate_bits(text);
 
         let result = container

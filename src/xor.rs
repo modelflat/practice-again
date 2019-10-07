@@ -13,15 +13,13 @@ mod tests {
 
     #[test]
     pub fn test_xor_applied_twice() {
-        let mut text = "❤️ = Red Heart".to_string().into_bytes();
+        let mut text = "some text".to_string().into_bytes();
 
         let key = "abc";
 
         xor_inplace(&mut text, key.as_bytes());
-        assert_ne!(String::from_utf8_lossy(&text), "❤️ = Red Heart".to_string());
-
         xor_inplace(&mut text, key.as_bytes());
-        assert_eq!(String::from_utf8_lossy(&text), "❤️ = Red Heart".to_string());
-    }
 
+        assert_eq!(String::from_utf8_lossy(&text), "some text".to_string());
+    }
 }

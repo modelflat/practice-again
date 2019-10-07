@@ -9,13 +9,8 @@ type StrFrequencies<'a> = Vec<(&'a str, f64)>;
 pub fn slide_string(s: &str, win: usize) -> impl Iterator<Item=&str> {
     s
         .char_indices()
-        .flat_map(move |(i, _)| {
-            s[i..]
-                .char_indices()
-                .skip(win - 1)
-                .next()
-                .map(|(j, c)| &s[i .. i + j + c.len_utf8()])
-        })
+        .zip(s.char_indices().skip(win - 1))
+        .map(move |((i, _), (j, c))| &s[i .. j + c.len_utf8()])
 }
 
 /// Computes counts of characters or character clusters in text, with respect to filter.
@@ -91,21 +86,4 @@ mod tests {
         })
     }
 
-    #[bench]
-    pub fn bench_counts_window_1(b: &mut Bencher) {
-        use crate::utils::is_russian_char;
-        match std::fs::read_to_string("book.txt") {
-            Ok(text) => b.iter(|| counts(text.as_str(), is_russian_char, 1).1.len()),
-            Err(_) => eprintln!("Cannot run bench for counts, book.txt is not available")
-        }
-    }
-
-    #[bench]
-    pub fn bench_counts_window_2(b: &mut Bencher) {
-        use crate::utils::is_russian_char;
-        match std::fs::read_to_string("book.txt") {
-            Ok(text) => b.iter(|| counts(text.as_str(), is_russian_char, 2).1.len()),
-            Err(_) => eprintln!("Cannot run bench for counts, book.txt is not available")
-        }
-    }
 }
